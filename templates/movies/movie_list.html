@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <form method="get" class="card p-3 shadow-sm">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Статус</label>
+                    <select name="status" class="form-select">
+                        <option value="">Все статусы</option>
+                        <option value="to_watch">Хочу посмотреть</option>
+                        <option value="watching">Смотрю</option>
+                        <option value="watched">Посмотрел</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Жанр</label>
+                    <select name="genre" class="form-select">
+                        <option value="">Все жанры</option>
+                        <option value="Action">Экшн</option>
+                        <option value="Comedy">Комедия</option>
+                        <option value="Drama">Драма</option>
+                        <option value="Horror">Ужасы</option>
+                        <option value="Sci-Fi">Научная фантастика</option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2 w-100">Применить</button>
+                    <a href="{% url 'movie-list' %}" class="btn btn-outline-secondary w-100">Сброс</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    {% for movie in movies %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title text-primary">{{ movie.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ movie.year }} | {{ movie.get_genre_display }}</h6>
+                <p class="card-text">
+                    <span class="badge {% if movie.status == 'watched' %}bg-success{% elif movie.status == 'watching' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
+                        {{ movie.get_status_display }}
+                    </span>
+                </p>
+                {% if movie.rating %}
+                <p class="text-warning">★ <strong>{{ movie.rating }}/10</strong></p>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                <a href="{% url 'movie-edit' movie.pk %}" class="btn btn-sm btn-outline-primary">Изменить</a>
+                <a href="{% url 'movie-delete' movie.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <p class="text-muted">Список пуст. Добавьте свой первый фильм!</p>
+        <a href="{% url 'movie-add' %}" class="btn btn-success">Добавить фильм</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

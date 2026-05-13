@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger shadow">
+            <div class="card-body text-center">
+                <h3 class="card-title text-danger">Удаление фильма</h3>
+                <p>Вы уверены, что хотите удалить фильм "<strong>{{ object.title }}</strong>"?</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger px-4">Да, удалить</button>
+                    <a href="{% url 'movie-list' %}" class="btn btn-secondary px-4">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
